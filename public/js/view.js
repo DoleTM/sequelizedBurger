@@ -5,7 +5,7 @@ $(document).ready(function() {
     var $burgerContainer = $(".burger-container");
     // Adding event listeners for deleting, editing, and adding burgers
     $(document).on("click", "button.delete", deleteBurger);
-    $(document).on("click", "button.complete", toggleComplete);
+    $(document).on("click", "button.devour", toggleDevour);
     $(document).on("click", ".burger-item", editBurger);
     $(document).on("keyup", ".burger-item", finishEdit);
     $(document).on("blur", ".burger-item", cancelEdit);
@@ -29,7 +29,7 @@ $(document).ready(function() {
   
     // This function grabs burgers from the database and updates the view
     function getBurgers() {
-      $.get("/api/burgers", function(data) {
+      $.get("/api/burger", function(data) {
         burgers = data;
         initializeRows();
       });
@@ -55,7 +55,7 @@ $(document).ready(function() {
     }
   
     // Toggles complete status
-    function toggleComplete(event) {
+    function toggleDevour(event) {
       event.stopPropagation();
       var burger = $(this).parent().data("burger");
       burger.complete = !burger.complete;
@@ -102,7 +102,7 @@ $(document).ready(function() {
           "<span>",
           burger.text,
           "</span>",
-          "<input type='text' class='edit' style='display: none;'>",
+          "<input type='text' class='edit' style='display: inherit;'>",
           "<button class='delete btn btn-danger'>x</button>",
           "<button class='complete btn btn-primary'>✓</button>",
           "</li>"
@@ -110,7 +110,7 @@ $(document).ready(function() {
       );
   
       $newInputRow.find("button.delete").data("id", burger.id);
-      $newInputRow.find("input.edit").css("display", "none");
+      $newInputRow.find("input.edit").css("display", "inherit");
       $newInputRow.data("burger", burger);
       if (burger.complete) {
         $newInputRow.find("span").css("text-decoration", "line-through");
@@ -126,7 +126,7 @@ $(document).ready(function() {
         complete: false
       };
   
-      $.post("/api/burgers", burger, getBurgers);
+      $.post("/api/burger/:burger", burger, getBurgers);
       $newItemInput.val("");
     }
   });
